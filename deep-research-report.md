@@ -2,11 +2,11 @@
 
 ## Executive summary
 
-Your framework’s strongest idea is that capability should be modeled as **edge generation under constraints**, not merely path search on a pre-given graph. In your own terms, capability is relational across agent, environment, infrastructure, tools, resources, permissions, and learned abstractions, and persistent organization is better described by constrained, weighted reachability than by static object inventories. That is a sound direction, and it aligns well with modern work on affordances, planning languages, provenance standards, and graph-based knowledge representation. Gibson-style affordances frame action availability as a relation between agent and environment; modern RL work makes the same point explicitly, treating affordances as state-dependent action availability that both narrows search and improves learned transition models. Your uploaded notes push this farther by treating admissible transformation structure, weighted reachability, and stable generators as primary explanatory objects rather than pre-enumerated states or objects. citeturn26view0turn26view2turn25view0turn26view3 fileciteturn0file14 fileciteturn0file9 fileciteturn0file10
+Your framework’s strongest idea is that capability should be modeled as **edge generation under constraints**, not merely path search on a pre-given graph. In your own terms, capability is relational across agent, environment, infrastructure, tools, resources, permissions, and learned abstractions, and persistent organization is better described by constrained, weighted reachability than by static object inventories. That is a sound direction, and it aligns well with modern work on affordances, planning languages, provenance standards, and graph-based knowledge representation. Gibson-style affordances frame action availability as a relation between agent and environment; modern RL work makes the same point explicitly, treating affordances as state-dependent action availability that both narrows search and improves learned transition models. Your uploaded notes push this farther by treating admissible transformation structure, weighted reachability, and stable generators as primary explanatory objects rather than pre-enumerated states or objects.
 
-The most concrete way to operationalize the framework is to build a **typed structural capability map** with six first-class layers: **states**, **transition edges**, **support carriers** such as agents and organizations, **enablers** such as resources/tools/infrastructure/permissions, **constraints** such as invariances and conservation laws, and **evidence/validation** with explicit provenance. For interchange and reasoning, the cleanest standards-aligned core is RDF plus SHACL plus PROV: RDF gives a graph of typed statements, SHACL gives machine-checkable structural constraints and logical composition such as `and` and `or`, and PROV gives interoperable modeling of entities, activities, agents, derivations, bundles, and provenance-of-provenance. citeturn2view3turn30view1turn30view0turn1view0turn2view5turn3view0
+The most concrete way to operationalize the framework is to build a **typed structural capability map** with six first-class layers: **states**, **transition edges**, **support carriers** such as agents and organizations, **enablers** such as resources/tools/infrastructure/permissions, **constraints** such as invariances and conservation laws, and **evidence/validation** with explicit provenance. For interchange and reasoning, the cleanest standards-aligned core is RDF plus SHACL plus PROV: RDF gives a graph of typed statements, SHACL gives machine-checkable structural constraints and logical composition such as `and` and `or`, and PROV gives interoperable modeling of entities, activities, agents, derivations, bundles, and provenance-of-provenance.
 
-I recommend treating **invariances, symmetries, conservation laws, guard conditions, and impossibility constraints as first-class nodes**, not comments on edges. That is the main architectural move that will distinguish your system from ordinary workflow graphs. In physics, Noether’s framework makes the connection between continuous symmetries and conserved quantities foundational; in planning, action models need typed preconditions and effects; in socio-technical systems, safety depends on explicitly modeling controls, barriers, hidden couplings, and the conditions under which controls fail. A capability map that does not represent such constraints as graph objects will eventually collapse into a shallow task graph. citeturn26view4turn27search0turn25view0turn15view0turn29view1
+I recommend treating **invariances, symmetries, conservation laws, guard conditions, and impossibility constraints as first-class nodes**, not comments on edges. That is the main architectural move that will distinguish your system from ordinary workflow graphs. In physics, Noether’s framework makes the connection between continuous symmetries and conserved quantities foundational; in planning, action models need typed preconditions and effects; in socio-technical systems, safety depends on explicitly modeling controls, barriers, hidden couplings, and the conditions under which controls fail. A capability map that does not represent such constraints as graph objects will eventually collapse into a shallow task graph.
 
 The rest of this report gives a concrete schema, uncertainty model, validator workflow, failure taxonomy, visualization grammar, four cross-domain case studies, and a prototype roadmap.
 
@@ -20,9 +20,9 @@ A useful structural capability map should answer five questions simultaneously:
 4. **How strong is the evidence and over what horizon does it remain reliable?**
 5. **What harms, adversarial uses, or failure pathways are also opened by the same edge?**
 
-That design directly fits your uploaded view that stable organization is best understood through weighted, constrained reachability, with boundaries defined by cost gradients and by conditions that preserve or break organization. fileciteturn0file9 fileciteturn0file10
+That design directly fits your uploaded view that stable organization is best understood through weighted, constrained reachability, with boundaries defined by cost gradients and by conditions that preserve or break organization.
 
-The ontological core should distinguish **descriptive truth**, **operational validity**, and **situational availability**. An edge can be physically possible but not presently available; available but not permitted; permitted but unsafe; safe in nominal conditions but fragile under perturbation; or blocked except through substitution. Modern planning languages reinforce this separation by representing actions through typed preconditions, resources, temporal conditions, and effects rather than through loose adjacency lists. citeturn25view0
+The ontological core should distinguish **descriptive truth**, **operational validity**, and **situational availability**. An edge can be physically possible but not presently available; available but not permitted; permitted but unsafe; safe in nominal conditions but fragile under perturbation; or blocked except through substitution. Modern planning languages reinforce this separation by representing actions through typed preconditions, resources, temporal conditions, and effects rather than through loose adjacency lists.
 
 The graph should therefore use the following primary entity classes.
 
@@ -40,7 +40,7 @@ The graph should therefore use the following primary entity classes.
 | **Evidence** | A concrete basis for belief in a map object | `evidence_id`, `evidence_type`, `artifact_ref`, `sample_scope`, `timestamp`, `quality_score` |
 | **Provenance Bundle** | Full derivation history of a claim, including provenance-of-provenance | `bundle_id`, `generated_by`, `used`, `attributed_to`, `derived_from`, `version` |
 
-This design is compatible with PROV’s distinction among **entities, activities, and agents**, its support for derivation and responsibility, and its explicit “bundle” mechanism for provenance of provenance. PROV was created precisely so heterogeneous systems could exchange provenance while preserving consistency and reasoning value. citeturn1view0turn2view5turn3view0
+This design is compatible with PROV’s distinction among **entities, activities, and agents**, its support for derivation and responsibility, and its explicit “bundle” mechanism for provenance of provenance. PROV was created precisely so heterogeneous systems could exchange provenance while preserving consistency and reasoning value.
 
 ### Recommended representation strategy
 
@@ -48,13 +48,13 @@ For a production-grade implementation, I recommend a **dual representation**:
 
 | Layer | Recommendation | Why |
 |---|---|---|
-| **Semantic interchange layer** | RDF / JSON-LD + PROV-O + domain ontology | Standardized, interoperable, queryable, inference-friendly. RDF graphs are sets of triples with well-defined logical meaning. PROV-O maps provenance to RDF. citeturn2view3turn2view5 |
-| **Operational storage layer** | Labeled property graph or graph-native event store | Better ergonomics for traversal-heavy planning, UI editing, path search, and interactive simulation. RDF and property graphs are complementary tradeoffs rather than mutually exclusive stacks. citeturn26view3turn28academia0 |
-| **Integrity layer** | SHACL shapes | Machine-checkable graph conformance, severities, result reports, logical `and` / `or` composition. citeturn30view1turn30view0turn2view2turn2view1 |
+| **Semantic interchange layer** | RDF / JSON-LD + PROV-O + domain ontology | Standardized, interoperable, queryable, inference-friendly. RDF graphs are sets of triples with well-defined logical meaning. PROV-O maps provenance to RDF. |
+| **Operational storage layer** | Labeled property graph or graph-native event store | Better ergonomics for traversal-heavy planning, UI editing, path search, and interactive simulation. RDF and property graphs are complementary tradeoffs rather than mutually exclusive stacks. |
+| **Integrity layer** | SHACL shapes | Machine-checkable graph conformance, severities, result reports, logical `and` / `or` composition. |
 | **Evidence layer** | Object store + immutable artifact IDs + hash/version refs | Keeps raw experiments, logs, proofs, PDFs, videos, and simulation outputs outside the hot graph while leaving the graph as the index. |
 | **Temporal change layer** | Append-only validation and update events | Preserves historical truth, rollback, and auditability. |
 
-The map should be **multi-resolution**. Your own framework repeatedly emphasizes that useful abstraction is not maximal granularity but the ability to expand where reachability is uncertain or blocked. That suggests compressed nodes and edges by default, with staged expansion into fine-grained subgraphs only when validators fail, risks spike, or planning requires detail. fileciteturn0file14
+The map should be **multi-resolution**. Your own framework repeatedly emphasizes that useful abstraction is not maximal granularity but the ability to expand where reachability is uncertain or blocked. That suggests compressed nodes and edges by default, with staged expansion into fine-grained subgraphs only when validators fail, risks spike, or planning requires detail.
 
 ### First-class constraints
 
@@ -91,7 +91,7 @@ Each constraint object should specify:
 | **Hazard barrier** | Preventive or mitigative control that must remain intact |
 | **Impossibility rule** | Hard prohibition or physically inadmissible transition |
 
-This is where your “invariance before invariants” intuition becomes operational: a map must encode not just discovered invariants but also the **supporting symmetry/constraint structure** that makes them portable across domains. Noether’s original variational formulation is the right conceptual anchor here because it ties admissible transformation structure to the conservation properties that survive those transformations. citeturn26view4turn27search0 fileciteturn0file9
+This is where your “invariance before invariants” intuition becomes operational: a map must encode not just discovered invariants but also the **supporting symmetry/constraint structure** that makes them portable across domains. Noether’s original variational formulation is the right conceptual anchor here because it ties admissible transformation structure to the conservation properties that survive those transformations.
 
 ## Schema and composition model
 
@@ -157,11 +157,11 @@ I recommend the following edge taxonomy as native map labels.
 | **deprecated** | Formerly usable but should no longer be relied upon | Superseded, unsafe, unsupported, or policy-retired |
 | **adversarial** | Edge exists primarily for misuse, exploitation, or attack paths | Achieves harmful or unauthorized state change |
 
-These distinctions matter because capability claims are frequently conflated. The same transition may be **possible** but not **permitted**; **permitted** but not **safe**; **safe in lab conditions** but **fragile in production**; or **available to an organization** but not to an individual carrier. Your own notes explicitly separate possessed, delegated, and collective capability, which is exactly the right move here. fileciteturn0file14
+These distinctions matter because capability claims are frequently conflated. The same transition may be **possible** but not **permitted**; **permitted** but not **safe**; **safe in lab conditions** but **fragile in production**; or **available to an organization** but not to an individual carrier. Your own notes explicitly separate possessed, delegated, and collective capability, which is exactly the right move here.
 
 ### Composition rules
 
-Composition should be typed and explicit, not implicit in path search. SHACL and planning formalisms give a useful precedent: conjunction and disjunction are first-class; conformance and validation are explicit; concurrency and temporal/resource conditions matter. citeturn30view1turn30view0turn25view0
+Composition should be typed and explicit, not implicit in path search. SHACL and planning formalisms give a useful precedent: conjunction and disjunction are first-class; conformance and validation are explicit; concurrency and temporal/resource conditions matter.
 
 ```mermaid
 flowchart TD
@@ -231,7 +231,7 @@ Use SHACL-like integrity rules to enforce basic graph quality:
 - Every `conservation` constraint must define ledger scope and allowed sources/sinks.
 - Every `fragile` edge must include at least one sensitivity factor or failure trigger.
 
-SHACL is particularly suitable because it already supports **conformance checking**, **validation reports**, **results graphs**, machine-readable **severity**, and logical **and/or** composition of shapes. citeturn30view2turn2view2turn2view1turn30view1turn30view0
+SHACL is particularly suitable because it already supports **conformance checking**, **validation reports**, **results graphs**, machine-readable **severity**, and logical **and/or** composition of shapes.
 
 ## Uncertainty, validation, and failure mapping
 
@@ -330,9 +330,9 @@ Each validation activity should record:
 | `next_review_date` | Horizon management |
 | `derived_from` | Provenance chain to prior validations |
 
-This is exactly the kind of thing PROV is designed for: provenance as a record of entities, activities, people, institutions, derivations, and even provenance-of-provenance. PROV constraints also matter because they define validity as a consistent history rather than merely arbitrary annotations, and SHACL allows validation reports to include additional provenance metadata. citeturn1view0turn3view0turn2view2
+This is exactly the kind of thing PROV is designed for: provenance as a record of entities, activities, people, institutions, derivations, and even provenance-of-provenance. PROV constraints also matter because they define validity as a consistent history rather than merely arbitrary annotations, and SHACL allows validation reports to include additional provenance metadata.
 
-Independent validation is especially important for high-stakes software and AI capability claims. NASA’s IV&V program exists specifically to improve reliability, find defects earlier, reduce mission development cost, and mitigate operational risk in safety- and mission-critical software. NIST’s AI RMF likewise frames AI risk management as a trustworthiness problem affecting individuals, organizations, and society, and treats the framework as a voluntary but structured basis for design, development, use, and evaluation. citeturn15view0turn29view1turn29view2
+Independent validation is especially important for high-stakes software and AI capability claims. NASA’s IV&V program exists specifically to improve reliability, find defects earlier, reduce mission development cost, and mitigate operational risk in safety- and mission-critical software. NIST’s AI RMF likewise frames AI risk management as a trustworthiness problem affecting individuals, organizations, and society, and treats the framework as a voluntary but structured basis for design, development, use, and evaluation.
 
 ### Failure modes, hidden harms, and adversarial edges
 
@@ -353,7 +353,7 @@ Minimum failure taxonomy:
 | **Hidden harm** | Goal reached but with untracked damage to third parties or downstream systems |
 | **Deprecation drift** | Edge persists in map after tool, policy, environment, or institution changed |
 
-Use **harm edges** from a primary edge to side-effect states and stakeholder-impact nodes. That keeps “success” from masking unsafe completion. This is where socio-technical safety concepts are useful: systems fail not only because components fail, but because controls, interfaces, incentives, and oversight structures are mis-specified or drift apart. citeturn15view0turn29view1
+Use **harm edges** from a primary edge to side-effect states and stakeholder-impact nodes. That keeps “success” from masking unsafe completion. This is where socio-technical safety concepts are useful: systems fail not only because components fail, but because controls, interfaces, incentives, and oversight structures are mis-specified or drift apart.
 
 ## Visualization and cross-domain case studies
 
@@ -402,7 +402,7 @@ Goal: `home_city -> island_destination_without_private_aircraft`
 | Confidence note | High for ferry route when schedule current; low for improvised water crossing |
 | Hidden-harm edge | `unsafe_sea_crossing -> injury/loss` |
 
-This case fits your framework directly: the destination is not meaningfully reachable by “search” until the map represents the carrier, infrastructure, permissions, and environmental conditions that generate the edge in the first place. fileciteturn0file14
+This case fits your framework directly: the destination is not meaningfully reachable by “search” until the map represents the carrier, infrastructure, permissions, and environmental conditions that generate the edge in the first place.
 
 #### Surgery
 
@@ -419,7 +419,7 @@ Goal: `indicated_patient -> completed_safe_operation`
 | Confidence note | Edge is valid only if sterile, consent, staffing, and critical safety controls all conform |
 | Hidden-harm edge | `retained_item`, `wrong-site surgery`, `infection`, `bile duct injury` |
 
-WHO’s surgical safety work makes the validation logic here concrete: structured checklists and phase-based verification are not mere bureaucracy; they are edge-stabilizing controls in a socio-technical system. Evidence summarized in the literature reports substantial reductions in complications and mortality after checklist implementation, though implementation quality matters. citeturn11search2
+WHO’s surgical safety work makes the validation logic here concrete: structured checklists and phase-based verification are not mere bureaucracy; they are edge-stabilizing controls in a socio-technical system. Evidence summarized in the literature reports substantial reductions in complications and mortality after checklist implementation, though implementation quality matters.
 
 #### AI capability
 
@@ -436,7 +436,7 @@ Goal: `base_model -> reliable_domain_specific_agent`
 | Confidence note | Separate capability confidence from safety confidence and deployment confidence |
 | Hidden-harm edge | `tool misuse`, `prompt injection`, `privacy leak`, `autonomous error cascade` |
 
-This case is where model cards and NIST AI RMF are especially useful. Model cards argue that deployed models should carry documented intended uses, evaluation procedures, performance characteristics, and limitations; NIST frames ontology, documentation, evaluation, and risk management as central to trustworthy AI. citeturn25view1turn29view1
+This case is where model cards and NIST AI RMF are especially useful. Model cards argue that deployed models should carry documented intended uses, evaluation procedures, performance characteristics, and limitations; NIST frames ontology, documentation, evaluation, and risk management as central to trustworthy AI.
 
 #### Institutional access
 
@@ -465,7 +465,7 @@ This case is especially valuable because it shows why **permissions and validato
 | **Hypergraph / n-ary event model** | Natural for multi-party transitions and rich preconditions | Harder tooling ecosystem | Complex scientific, institutional, or multi-agent workflows |
 | **Process algebra / Petri net overlay** | Excellent for concurrency and resource flow | Can become abstract and difficult for end users | High-rigor execution and simulation backends |
 
-Knowledge-graph literature highlights schema, identity, and context as central concerns, which is exactly why a hybrid representation is attractive here: you need the semantics of a knowledge graph and the ergonomics of a traversal graph. citeturn26view3turn28academia0
+Knowledge-graph literature highlights schema, identity, and context as central concerns, which is exactly why a hybrid representation is attractive here: you need the semantics of a knowledge graph and the ergonomics of a traversal graph.
 
 ## Prototyping, evaluation, and prioritized references
 
@@ -479,7 +479,7 @@ I would prototype in four passes.
 - SHACL conformance checks for structural integrity.
 - Rule engine for derived statuses such as `available`, `permitted`, and `safe`.
 - Provenance logging for every edge assertion and validation update.
-- Time-based invalidation of stale permissions, tests, or evidence. citeturn30view2turn2view2turn3view0
+- Time-based invalidation of stale permissions, tests, or evidence.
 
 **Pass three** should build **interactive views**:
 - layered graph explorer,
@@ -530,35 +530,35 @@ The most practically useful references for this framework are these.
 
 **Official standards and reference architectures**
 
-- W3C **PROV-DM** and **PROV-O** for provenance entities, activities, agents, derivations, bundles, and interoperable provenance exchange. citeturn1view0turn2view5
-- W3C **PROV Constraints** for validity, normalization, consistency checking, and equivalence of provenance histories. citeturn3view0
-- W3C **RDF 1.1 Concepts** for the graph data model and formal statement semantics. citeturn2view3
-- W3C **SHACL** for logical shape constraints, conformance checking, severities, and validation reports. citeturn30view2turn30view1turn30view0turn2view2turn2view1
-- NIST **AI Risk Management Framework** for trustworthiness-oriented risk management and evaluation in AI systems. citeturn29view1turn29view2
+- W3C **PROV-DM** and **PROV-O** for provenance entities, activities, agents, derivations, bundles, and interoperable provenance exchange.
+- W3C **PROV Constraints** for validity, normalization, consistency checking, and equivalence of provenance histories.
+- W3C **RDF 1.1 Concepts** for the graph data model and formal statement semantics.
+- W3C **SHACL** for logical shape constraints, conformance checking, severities, and validation reports.
+- NIST **AI Risk Management Framework** for trustworthiness-oriented risk management and evaluation in AI systems.
 
 **Seminal and primary literature**
 
-- Emmy Noether, **Invariant Variation Problems** for the foundational link between transformation symmetries and conserved structure. citeturn26view4turn26view6
-- James J. Gibson’s affordance tradition, with a modern planning-compatible treatment in Khetarpal et al., **A Theory of Affordances in Reinforcement Learning**, which explicitly frames affordances as state-dependent feasible actions useful for planning and transition modeling. citeturn26view0turn26view2
-- Fox and Long, **PDDL2.1**, for typed preconditions, effects, temporal and numeric resources, and validation of concurrent plans. citeturn25view0
-- Hogan et al., **Knowledge Graphs**, for schema, identity, context, and quality considerations in graph-structured knowledge systems. citeturn26view3
-- Mitchell et al., **Model Cards for Model Reporting**, for documenting intended use, evaluation procedures, disaggregated performance, and deployment limitations. citeturn25view1
+- Emmy Noether, **Invariant Variation Problems** for the foundational link between transformation symmetries and conserved structure.
+- James J. Gibson’s affordance tradition, with a modern planning-compatible treatment in Khetarpal et al., **A Theory of Affordances in Reinforcement Learning**, which explicitly frames affordances as state-dependent feasible actions useful for planning and transition modeling.
+- Fox and Long, **PDDL2.1**, for typed preconditions, effects, temporal and numeric resources, and validation of concurrent plans.
+- Hogan et al., **Knowledge Graphs**, for schema, identity, context, and quality considerations in graph-structured knowledge systems.
+- Mitchell et al., **Model Cards for Model Reporting**, for documenting intended use, evaluation procedures, disaggregated performance, and deployment limitations.
 
 **Socio-technical and domain validation exemplars**
 
-- NASA **IV&V Program** as a model of independent validation for mission-critical software in a high-stakes socio-technical environment. citeturn15view0
-- WHO surgical safety literature as a model of phase-based, checklist-mediated validation in a high-risk institutional workflow. citeturn11search2
+- NASA **IV&V Program** as a model of independent validation for mission-critical software in a high-stakes socio-technical environment.
+- WHO surgical safety literature as a model of phase-based, checklist-mediated validation in a high-risk institutional workflow.
 
 **Your uploaded framework texts as direct conceptual antecedents**
 
-- **Edge-Generating Capability Graphs** for the central claim that systems become more capable by generating edges, not merely by searching them. fileciteturn0file14
-- **Constrained Generative Reachability** and **Constrained Generative Closure** for the shift from objecthood to weighted admissible transformation space and stable generators. fileciteturn0file9 fileciteturn0file10
-- **Language as Projection** for keeping linguistic descriptions distinct from the underlying structural map while still modeling language as operational infrastructure where recognition regimes matter. fileciteturn0file13
+- **Edge-Generating Capability Graphs** for the central claim that systems become more capable by generating edges, not merely by searching them.
+- **Constrained Generative Reachability** and **Constrained Generative Closure** for the shift from objecthood to weighted admissible transformation space and stable generators.
+- **Language as Projection** for keeping linguistic descriptions distinct from the underlying structural map while still modeling language as operational infrastructure where recognition regimes matter.
 
 ## Open questions and limitations
 
 Two issues remain genuinely open.
 
-First, the framework still needs a crisp rule for **abstraction boundary selection**: when should a compressed edge remain atomic, and when must it expand into substructure? Your notes point toward “expand on failure or uncertainty,” which is good, but the operational trigger thresholds still need formalization. fileciteturn0file14
+First, the framework still needs a crisp rule for **abstraction boundary selection**: when should a compressed edge remain atomic, and when must it expand into substructure? Your notes point toward “expand on failure or uncertainty,” which is good, but the operational trigger thresholds still need formalization.
 
 Second, there is no universally correct way to aggregate uncertainty across mixed evidence types, dependent validators, and socio-technical drift. The report therefore recommends a conservative, typed uncertainty model rather than claiming a single solved calculus. That is a limitation, but it is also the right design choice at prototype stage.
